@@ -27,7 +27,7 @@ all :		$(NAME)
 %.o: %.c
 			$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME) :
+$(NAME) : $(OBJS)
 			$(CC) $(OBJS) -o $(NAME)
 
 clean :
