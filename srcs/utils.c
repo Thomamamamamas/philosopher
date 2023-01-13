@@ -11,6 +11,31 @@
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
 
+long long	get_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void	ft_sleep(int time)
+{
+	long long	start_time;
+
+	start_time = get_time();
+	while (get_time() - start_time < time)
+		usleep(time / 10);
+}
+
+void	print_state(t_philo *philo, char *str)
+{
+	long long	time;
+
+	time = get_time() - philo->start_time; 
+	printf("%lldms %d is %s\n", time, philo->id, str);
+}
+
 int	ft_atoi(const char *str)
 {
 	int	i;
