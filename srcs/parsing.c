@@ -58,10 +58,11 @@ void	init_philos(t_program *t_prog)
 
 	n = 0;
 	t_prog->start_time = get_time();
-	init_forks(t_prog);
+	//init_forks(t_prog);
 	t_prog->philos = (t_philo *)malloc(sizeof(t_philo) * t_prog->nb_philo);
 	while (n < t_prog->nb_philo)
 	{
+		t_prog->actual_id = n;
 		t_prog->philos[n].id = n + 1;
 		t_prog->philos[n].start_time = t_prog->start_time;
 		t_prog->philos[n].ttd = t_prog->ttd;
@@ -70,7 +71,7 @@ void	init_philos(t_program *t_prog)
 		t_prog->philos[n].limit_eat = t_prog->limit_eat;
 		t_prog->philos[n].nb_must_eat = t_prog->nb_must_eat;
 		t_prog->philos[n].nb_eat = 0;
-		pthread_create(&t_prog->philos[n].thread, NULL, lifestyle, &(t_prog->philos[n]));
+		pthread_create(&t_prog->philos[n].thread, NULL, lifestyle, t_prog);
 		n++;
 	}
 	n = 0;
@@ -86,9 +87,10 @@ void	init_forks(t_program *t_prog)
 	int	n;
 
 	n = 0;
+	pthread_mutex_init(&t_prog->waiter, NULL);
 	while (n < t_prog->nb_philo)
 	{
-		
+		pthread_mutex_init(&t_prog->forks[n], NULL);
 		n++;
 	}
 }

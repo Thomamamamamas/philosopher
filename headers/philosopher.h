@@ -34,6 +34,7 @@ typedef struct s_philo
 
 typedef struct s_program
 {
+	int				actual_id;
 	int				nb_philo;
 	int				ttd;
 	int				tte;
@@ -43,6 +44,7 @@ typedef struct s_program
 	long long		start_time;
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	waiter;
 }					t_program;
 
 void		free_all(t_program *prog);
@@ -58,7 +60,8 @@ void		print_state(t_philo *philo, char *str);
 int			ft_atoi(const char *str);
 int			ft_strcmp(char *s1, char *s2);
 //philo
-void	*lifestyle(void *p);
+void	*lifestyle(void *tmp_prog);
+void	philo_died(t_philo *philo);
 
 
 #endif

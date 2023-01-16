@@ -13,6 +13,15 @@
 
 void	free_all(t_program *t_prog)
 {
+	int	n;
+
+	n = 0;
+	pthread_mutex_destroy(&t_prog->waiter);
+	while (n < t_prog->nb_philo)
+	{
+		pthread_mutex_destroy(&t_prog->forks[n]);
+		n++;
+	}
 	free(t_prog->philos);
 	free(t_prog->forks);
 }
