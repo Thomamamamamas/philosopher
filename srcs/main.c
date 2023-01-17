@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:00:09 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/10 15:17:09 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/17 17:37:27 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -35,6 +35,9 @@ int	main(int argc, char **argv)
 		printf("Erreur: Argument non valide\n");
 		return (1);
 	}
+	init_forks(&t_prog);
+	t_prog.start_time = get_time();
+	t_prog.philos = (t_philo *)malloc(sizeof(t_philo) * t_prog.nb_philo);
 	init_philos(&t_prog);
 	free_all(&t_prog);
 	return (0);

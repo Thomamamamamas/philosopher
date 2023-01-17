@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:01:20 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/10 15:17:16 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/17 17:37:24 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,22 @@
 
 typedef struct s_philo
 {
-	pthread_t	thread;
-	int			id;
-	long long	start_time;
-	int			ttd;
-	int			tte;
-	int			tts;
-	int			limit_eat;
-	int			nb_must_eat;
-	int			nb_eat;
+	pthread_t		thread;
+	int				id;
+	long long		start_time;
+	int				ttd;
+	int				tte;
+	int				tts;
+	int				limit_eat;
+	int				nb_must_eat;
+	int				nb_eat;
+	pthread_mutex_t	l_fork;
+	pthread_mutex_t	r_fork;
+	pthread_mutex_t	waiter;
 }				t_philo;
 
 typedef struct s_program
 {
-	int				actual_id;
 	int				nb_philo;
 	int				ttd;
 	int				tte;
@@ -44,6 +46,7 @@ typedef struct s_program
 	long long		start_time;
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	printer;
 	pthread_mutex_t	waiter;
 }					t_program;
 
@@ -51,8 +54,9 @@ void		free_all(t_program *prog);
 //parsing
 int			parse_arg(t_program *t_prog, int argc, char **argv);
 int			check_good_parsing_value(t_program *t_prog, char **argv);
-void		init_philos(t_program *t_prog);
 void		init_forks(t_program *forks);
+void		init_philos(t_program *t_prog);
+void		assign_philo_forks(t_program *t_prog, int n);
 //utils
 long long	get_time(void);
 void		ft_sleep(int time);
@@ -62,6 +66,5 @@ int			ft_strcmp(char *s1, char *s2);
 //philo
 void	*lifestyle(void *tmp_prog);
 void	philo_died(t_philo *philo);
-
 
 #endif

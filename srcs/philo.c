@@ -1,15 +1,13 @@
 
 #include "../headers/philosopher.h"
 
-void	*lifestyle(void *tmp_prog)
+void	*lifestyle(void *tmp_philo)
 {
-	t_program	*t_prog;
-	//t_philo		*philo;
+	t_philo		*philo;
 
-	t_prog = (t_program *)tmp_prog;
-	//philo = &t_prog->philos[t_prog->actual_id];
+	philo = (t_philo *)tmp_philo;
 	printf("____________\n");
-	printf("%d\n", t_prog->actual_id);
+	printf("%d\n", philo->id);
 	return (NULL);
 }
 

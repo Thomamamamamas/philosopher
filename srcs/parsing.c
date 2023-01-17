@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:00:07 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/10 15:17:11 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/17 17:37:28 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -52,17 +52,27 @@ int	check_good_parsing_value(t_program *t_prog, char **argv)
 	return (1);
 }
 
+void	init_forks(t_program *t_prog)
+{
+	int	n;
+
+	n = 0;
+	pthread_mutex_init(&t_prog->printer, NULL);
+	pthread_mutex_init(&t_prog->waiter, NULL);
+	while (n < t_prog->nb_philo)
+	{
+		pthread_mutex_init(&t_prog->forks[n], NULL);
+		n++;
+	}
+}
+
 void	init_philos(t_program *t_prog)
 {
 	int		n;
 
 	n = 0;
-	t_prog->start_time = get_time();
-	//init_forks(t_prog);
-	t_prog->philos = (t_philo *)malloc(sizeof(t_philo) * t_prog->nb_philo);
 	while (n < t_prog->nb_philo)
 	{
-		t_prog->actual_id = n;
 		t_prog->philos[n].id = n + 1;
 		t_prog->philos[n].start_time = t_prog->start_time;
 		t_prog->philos[n].ttd = t_prog->ttd;
@@ -71,6 +81,7 @@ void	init_philos(t_program *t_prog)
 		t_prog->philos[n].limit_eat = t_prog->limit_eat;
 		t_prog->philos[n].nb_must_eat = t_prog->nb_must_eat;
 		t_prog->philos[n].nb_eat = 0;
+		assign_philo_forks(t_prog, n);
 		pthread_create(&t_prog->philos[n].thread, NULL, lifestyle, t_prog);
 		n++;
 	}
@@ -82,15 +93,15 @@ void	init_philos(t_program *t_prog)
 	}
 }
 
-void	init_forks(t_program *t_prog)
+void	assign_philo_forks(t_program *t_prog, int n)
 {
-	int	n;
-
-	n = 0;
-	pthread_mutex_init(&t_prog->waiter, NULL);
-	while (n < t_prog->nb_philo)
-	{
-		pthread_mutex_init(&t_prog->forks[n], NULL);
-		n++;
-	}
+	t_prog->philos[n].waiter = &t_prog->waiter;
+	if (n == 0)
+		t_prog->philos[n].r_fork = &t_prog->forks[t_prog->nb_philo - 1];
+	else
+		t_prog->philos[n].r_fork = &t_prog->forks[n - 1];
+	if (n == t_prog->nb_philo - 1)
+		t_prog->philos[n].l_fork = &t_prog->forks[0];
+	else
+		t_prog->philos[n].l_fork = &t_prog->forks[n];
 }
