@@ -6,34 +6,34 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:01:20 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/17 17:37:24 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/18 17:25:14 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHER_H
 # define PHILOSOPHER_H
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <sys/time.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <pthread.h>
+# include <sys/time.h>
+
+struct	s_program;
 
 typedef struct s_philo
 {
-	pthread_t		thread;
-	int				id;
-	long long		start_time;
-	int				ttd;
-	int				tte;
-	int				tts;
-	int				limit_eat;
-	int				nb_must_eat;
-	int				nb_eat;
-	pthread_mutex_t	l_fork;
-	pthread_mutex_t	r_fork;
-	pthread_mutex_t	waiter;
-}				t_philo;
+	pthread_t			thread;
+	int					id;
+	long long			start_time;
+	int					ttd;
+	int					tte;
+	int					tts;
+	int					limit_eat;
+	int					nb_must_eat;
+	int					nb_eat;
+	struct s_program	*prog;
+}						t_philo;
 
 typedef struct s_program
 {
@@ -56,7 +56,6 @@ int			parse_arg(t_program *t_prog, int argc, char **argv);
 int			check_good_parsing_value(t_program *t_prog, char **argv);
 void		init_forks(t_program *forks);
 void		init_philos(t_program *t_prog);
-void		assign_philo_forks(t_program *t_prog, int n);
 //utils
 long long	get_time(void);
 void		ft_sleep(int time);
@@ -64,7 +63,7 @@ void		print_state(t_philo *philo, char *str);
 int			ft_atoi(const char *str);
 int			ft_strcmp(char *s1, char *s2);
 //philo
-void	*lifestyle(void *tmp_prog);
-void	philo_died(t_philo *philo);
+void		*lifestyle(void *tmp_prog);
+void		philo_died(t_philo *philo);
 
 #endif

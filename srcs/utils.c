@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:46:19 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/17 17:37:28 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/18 17:25:20 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -32,7 +32,7 @@ void	print_state(t_philo *philo, char *str)
 {
 	long long	time;
 
-	time = get_time() - philo->start_time; 
+	time = get_time() - philo->start_time;
 	printf("%lldms %d is %s\n", time, philo->id, str);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:00:07 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/17 17:37:28 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/18 17:25:19 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -57,6 +57,7 @@ void	init_forks(t_program *t_prog)
 	int	n;
 
 	n = 0;
+	t_prog->forks = malloc(sizeof(pthread_mutex_t) * t_prog->nb_philo);
 	pthread_mutex_init(&t_prog->printer, NULL);
 	pthread_mutex_init(&t_prog->waiter, NULL);
 	while (n < t_prog->nb_philo)
@@ -81,8 +82,8 @@ void	init_philos(t_program *t_prog)
 		t_prog->philos[n].limit_eat = t_prog->limit_eat;
 		t_prog->philos[n].nb_must_eat = t_prog->nb_must_eat;
 		t_prog->philos[n].nb_eat = 0;
-		assign_philo_forks(t_prog, n);
-		pthread_create(&t_prog->philos[n].thread, NULL, lifestyle, t_prog);
+		t_prog->philos[n].prog = t_prog;
+		pthread_create(&t_prog->philos[n].thread, NULL, lifestyle, &t_prog->philos[n]);
 		n++;
 	}
 	n = 0;
@@ -91,17 +92,4 @@ void	init_philos(t_program *t_prog)
 		pthread_join(t_prog->philos[n].thread, NULL);
 		n++;
 	}
-}
-
-void	assign_philo_forks(t_program *t_prog, int n)
-{
-	t_prog->philos[n].waiter = &t_prog->waiter;
-	if (n == 0)
-		t_prog->philos[n].r_fork = &t_prog->forks[t_prog->nb_philo - 1];
-	else
-		t_prog->philos[n].r_fork = &t_prog->forks[n - 1];
-	if (n == t_prog->nb_philo - 1)
-		t_prog->philos[n].l_fork = &t_prog->forks[0];
-	else
-		t_prog->philos[n].l_fork = &t_prog->forks[n];
 }
