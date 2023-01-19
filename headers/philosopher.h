@@ -26,17 +26,15 @@ typedef struct s_philo
 	pthread_t			thread;
 	int					id;
 	long long			start_time;
-	int					ttd;
-	int					tte;
-	int					tts;
-	int					limit_eat;
-	int					nb_must_eat;
 	int					nb_eat;
+	int					last_time_eat;
 	struct s_program	*prog;
 }						t_philo;
 
 typedef struct s_program
 {
+	int				is_dead;
+	int				order;
 	int				nb_philo;
 	int				ttd;
 	int				tte;
@@ -63,7 +61,11 @@ void		print_state(t_philo *philo, char *str);
 int			ft_atoi(const char *str);
 int			ft_strcmp(char *s1, char *s2);
 //philo
-void		*lifestyle(void *tmp_prog);
-void		philo_died(t_philo *philo);
+void		*life(void *tmp_prog);
+int			philo_starved(t_philo *philo);
+void		philo_funeral(t_philo *philo);
+//state
+int			philo_eat(t_philo *philo);
+int			philo_sleep(t_philo *philo);
 
 #endif

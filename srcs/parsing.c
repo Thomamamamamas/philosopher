@@ -72,18 +72,16 @@ void	init_philos(t_program *t_prog)
 	int		n;
 
 	n = 0;
+	t_prog->start_time = get_time();
+	t_prog->order = 0;
+	t_prog->philos = (t_philo *)malloc(sizeof(t_philo) * t_prog->nb_philo);
 	while (n < t_prog->nb_philo)
 	{
 		t_prog->philos[n].id = n + 1;
-		t_prog->philos[n].start_time = t_prog->start_time;
-		t_prog->philos[n].ttd = t_prog->ttd;
-		t_prog->philos[n].tte = t_prog->tte;
-		t_prog->philos[n].tts = t_prog->tts;
-		t_prog->philos[n].limit_eat = t_prog->limit_eat;
-		t_prog->philos[n].nb_must_eat = t_prog->nb_must_eat;
 		t_prog->philos[n].nb_eat = 0;
 		t_prog->philos[n].prog = t_prog;
-		pthread_create(&t_prog->philos[n].thread, NULL, lifestyle, &t_prog->philos[n]);
+		t_prog->philos[n].last_time_eat = t_prog->start_time;
+		pthread_create(&t_prog->philos[n].thread, NULL, life, &t_prog->philos[n]);
 		n++;
 	}
 	n = 0;

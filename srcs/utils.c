@@ -32,8 +32,10 @@ void	print_state(t_philo *philo, char *str)
 {
 	long long	time;
 
-	time = get_time() - philo->start_time;
+	pthread_mutex_lock(&philo->prog->printer);
+	time = get_time() - philo->prog->start_time;
 	printf("%lldms %d is %s\n", time, philo->id, str);
+	pthread_mutex_unlock(&philo->prog->printer);
 }
 
 int	ft_atoi(const char *str)

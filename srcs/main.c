@@ -17,6 +17,7 @@ void	free_all(t_program *t_prog)
 
 	n = 0;
 	pthread_mutex_destroy(&t_prog->waiter);
+	pthread_mutex_destroy(&t_prog->printer);
 	while (n < t_prog->nb_philo)
 	{
 		pthread_mutex_destroy(&t_prog->forks[n]);
@@ -36,8 +37,6 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	init_forks(&t_prog);
-	t_prog.start_time = get_time();
-	t_prog.philos = (t_philo *)malloc(sizeof(t_philo) * t_prog.nb_philo);
 	init_philos(&t_prog);
 	free_all(&t_prog);
 	return (0);
