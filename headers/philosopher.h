@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:01:20 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/20 14:43:45 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/20 17:37:01 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_philo
 	int					id;
 	long long			start_time;
 	int					nb_eat;
-	int					last_time_eat;
+	long long			last_time_eat;
 	pthread_mutex_t		*l_fork;
 	pthread_mutex_t		*r_fork;
 	struct s_program	*prog;
@@ -47,6 +47,7 @@ typedef struct s_program
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	printer;
+	pthread_mutex_t	death_printer;
 	pthread_mutex_t	waiter;
 }					t_program;
 
