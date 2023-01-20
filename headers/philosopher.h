@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:01:20 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/18 17:25:14 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/20 14:43:45 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ typedef struct s_philo
 	long long			start_time;
 	int					nb_eat;
 	int					last_time_eat;
+	pthread_mutex_t		*l_fork;
+	pthread_mutex_t		*r_fork;
 	struct s_program	*prog;
 }						t_philo;
 
@@ -62,10 +64,14 @@ int			ft_atoi(const char *str);
 int			ft_strcmp(char *s1, char *s2);
 //philo
 void		*life(void *tmp_prog);
+int			eat_procedure(t_philo *philo);
+int			grab_forks(t_philo *philo);
 int			philo_starved(t_philo *philo);
 void		philo_funeral(t_philo *philo);
 //state
 int			philo_eat(t_philo *philo);
+int			philo_take_fork(t_philo *philo);
 int			philo_sleep(t_philo *philo);
+int			philo_think(t_philo *philo);
 
 #endif
