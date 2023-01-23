@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 11:43:21 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/20 17:37:53 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/23 16:48:48 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -15,24 +15,22 @@ void	*life(void *tmp_philo)
 {
 	t_philo		*philo;
 	int			dead;
-	int			eat;
 
 	philo = (t_philo *)tmp_philo;
-	while (!philo->prog->is_dead && philo->nb_eat < philo->prog->nb_must_eat)
+	while (!philo->prog->is_dead)
 	{
-		if (philo->prog->order == philo->id % 2 && eat == 0)
+		if (philo->prog->order == philo->id % 2 && philo->just_eat == 0)
 		{
 			dead = philo_think(philo);
 			dead = eat_procedure(philo);
-			eat = 1;
+			check_change_order(philo->prog);
 		}
 		else
-		{
 			dead = philo_sleep(philo);
-			eat = 1;
-		}
-		if (dead == 1)
+		if (dead != 0)
 			philo_funeral(philo);
+		else if (check_all_eat(philo->prog))
+			return (NULL);
 	}
 	return (NULL);
 }
@@ -45,6 +43,9 @@ int	eat_procedure(t_philo *philo)
 	pthread_mutex_lock(&philo->prog->printer);
 	res = grab_forks(philo);
 	res = philo_eat(philo);
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(&philo->prog->waiter);
 	return (res);
 }
 

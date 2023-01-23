@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:01:20 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/20 17:37:01 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/23 16:48:51 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_philo
 	int					id;
 	long long			start_time;
 	int					nb_eat;
+	int					just_eat;
 	long long			last_time_eat;
 	pthread_mutex_t		*l_fork;
 	pthread_mutex_t		*r_fork;
@@ -74,5 +75,8 @@ int			philo_eat(t_philo *philo);
 int			philo_take_fork(t_philo *philo);
 int			philo_sleep(t_philo *philo);
 int			philo_think(t_philo *philo);
+//check
+int			check_all_eat(t_program *t_prog);
+int			check_change_order(t_program *t_prog);
 
 #endif

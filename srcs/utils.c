@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:46:19 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/20 14:43:41 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/23 15:25:30 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -32,6 +32,8 @@ void	print_state(t_philo *philo, char *str)
 {
 	long long	time;
 
+	if (philo->prog->is_dead)
+		return ;
 	time = get_time() - philo->prog->start_time;
 	printf("%lldms %d %s\n", time, philo->id, str);
 }
