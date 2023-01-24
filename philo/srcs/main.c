@@ -32,10 +32,7 @@ int	main(int argc, char **argv)
 	t_program	t_prog;
 
 	if (!parse_arg(&t_prog, argc, argv))
-	{
-		printf("Erreur: Argument non valide\n");
-		return (1);
-	}
+		return(printf("Erreur: Argument non valide\n"));
 	init_forks(&t_prog);
 	init_philos(&t_prog);
 	free_all(&t_prog);

@@ -22,19 +22,20 @@ int	philo_eat(t_philo *philo)
 	print_state(philo, "is eating 🍝");
 	pthread_mutex_unlock(&philo->prog->printer);
 	pthread_mutex_unlock(&philo->prog->waiter);
+	philo->nb_eat++;
+	philo->just_eat = 1;
+	check_change_order(philo->prog);
 	if (supp_time > 0)
 	{
-		ft_sleep(philo->prog->ttd);
+		ft_sleep(philo->prog, philo->prog->ttd);
 		if (philo_starved(philo))
 			starved = 1;
 		else
-			ft_sleep(supp_time);
+			ft_sleep(philo->prog, supp_time);
 	}
 	else
-		ft_sleep(philo->prog->tte);
+		ft_sleep(philo->prog, philo->prog->tte);
 	philo->last_time_eat = get_time();
-	philo->nb_eat++;
-	philo->just_eat = 1;
 	return (starved + philo_starved(philo));
 }
 
@@ -54,20 +55,20 @@ int	philo_sleep(t_philo *philo)
 	pthread_mutex_unlock(&philo->prog->printer);
 	if (supp_time > 0)
 	{
-		ft_sleep(philo->prog->ttd);
+		ft_sleep(philo->prog, philo->prog->ttd);
 		if (philo_starved(philo))
 			return (1);
-		ft_sleep(supp_time);
+		ft_sleep(philo->prog, supp_time);
 	}
 	else
-		ft_sleep(philo->prog->tts);
+		ft_sleep(philo->prog, philo->prog->tts);
 	return (philo_starved(philo));
 }
 
 int	philo_think(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->prog->printer);
-	print_state(philo, "is thinking ");
+	print_state(philo, "is thinking 🤔");
 	pthread_mutex_unlock(&philo->prog->printer);
 	return (philo_starved(philo));
 }

@@ -23,7 +23,6 @@ void	*life(void *tmp_philo)
 		{
 			dead = philo_think(philo);
 			dead = eat_procedure(philo);
-			check_change_order(philo->prog);
 		}
 		else
 			dead = philo_sleep(philo);
@@ -65,7 +64,7 @@ int	grab_forks(t_philo *philo)
 	tmp = philo_take_fork(philo);
 	pthread_mutex_lock(philo->r_fork);
 	tmp = philo_take_fork(philo);
-	return (philo_starved(philo));
+	return (tmp + philo_starved(philo));
 }
 
 int	philo_starved(t_philo *philo)
@@ -80,8 +79,10 @@ int	philo_starved(t_philo *philo)
 
 void	philo_funeral(t_philo *philo)
 {
+	if (philo->prog->is_dead)
+		return ;
 	pthread_mutex_lock(&philo->prog->death_printer);
-	print_state(philo, "is dead 💀");
+	print_state(philo, "died 💀");
 	pthread_mutex_unlock(&philo->prog->death_printer);
 	philo->prog->is_dead = 1;
 }

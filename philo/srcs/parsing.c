@@ -21,6 +21,7 @@ int	parse_arg(t_program *t_prog, int argc, char **argv)
 			t_prog->ttd = ft_atoi(argv[2]);
 			t_prog->tte = ft_atoi(argv[3]);
 			t_prog->tts = ft_atoi(argv[4]);
+			t_prog->is_dead = 0;
 			if (argc == 6)
 			{
 				t_prog->limit_eat = 1;
@@ -73,7 +74,7 @@ void	init_philos(t_program *t_prog)
 
 	n = 0;
 	t_prog->start_time = get_time();
-	t_prog->order = 0;
+	t_prog->order = 1;
 	t_prog->philos = (t_philo *)malloc(sizeof(t_philo) * t_prog->nb_philo);
 	while (n < t_prog->nb_philo)
 	{

@@ -50,6 +50,7 @@ typedef struct s_program
 	pthread_mutex_t	printer;
 	pthread_mutex_t	death_printer;
 	pthread_mutex_t	waiter;
+	pthread_mutex_t	check;
 }					t_program;
 
 void		free_all(t_program *prog);
@@ -60,7 +61,7 @@ void		init_forks(t_program *forks);
 void		init_philos(t_program *t_prog);
 //utils
 long long	get_time(void);
-void		ft_sleep(int time);
+void		ft_sleep(t_program *philo, int time);
 void		print_state(t_philo *philo, char *str);
 int			ft_atoi(const char *str);
 int			ft_strcmp(char *s1, char *s2);

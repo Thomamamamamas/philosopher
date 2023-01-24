@@ -19,10 +19,12 @@ long long	get_time(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void	ft_sleep(int time)
+void	ft_sleep(t_program *t_prog, int time)
 {
 	long long	start_time;
 
+	if (t_prog->is_dead)
+		return ;
 	start_time = get_time();
 	while (get_time() - start_time < time)
 		usleep(time / 10);
@@ -32,7 +34,7 @@ void	print_state(t_philo *philo, char *str)
 {
 	long long	time;
 
-	if (philo->prog->is_dead)
+	if (philo->prog->is_dead && ft_strcmp(str, "is dead 💀"))
 		return ;
 	time = get_time() - philo->prog->start_time;
 	printf("%lldms %d %s\n", time, philo->id, str);
