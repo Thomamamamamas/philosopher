@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 11:43:21 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/23 16:48:48 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/26 12:08:44 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -27,7 +27,10 @@ void	*life(void *tmp_philo)
 		else
 			dead = philo_sleep(philo);
 		if (dead != 0)
+		{
 			philo_funeral(philo);
+			return (NULL);
+		}
 		else if (check_all_eat(philo->prog))
 			return (NULL);
 	}
@@ -44,7 +47,6 @@ int	eat_procedure(t_philo *philo)
 	res = philo_eat(philo);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
-	pthread_mutex_unlock(&philo->prog->waiter);
 	return (res);
 }
 
@@ -72,17 +74,20 @@ int	philo_starved(t_philo *philo)
 	long long	actual_time;
 
 	actual_time = get_time();
-	if (actual_time - philo->last_time_eat >= (long long)philo->prog->ttd)
+	if (actual_time - philo->last_time_eat > (long long)philo->prog->ttd)
 		return (1);
 	return (0);
 }
 
 void	philo_funeral(t_philo *philo)
 {
-	if (philo->prog->is_dead)
-		return ;
 	pthread_mutex_lock(&philo->prog->death_printer);
+	if (philo->prog->is_dead)
+	{
+		pthread_mutex_unlock(&philo->prog->death_printer);
+		return ;
+	}
 	print_state(philo, "died 💀");
-	pthread_mutex_unlock(&philo->prog->death_printer);
 	philo->prog->is_dead = 1;
+	pthread_mutex_unlock(&philo->prog->death_printer);
 }

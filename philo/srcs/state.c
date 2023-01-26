@@ -6,10 +6,9 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:37:11 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/23 16:48:46 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/26 12:08:46 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "../headers/philosopher.h"
 
 int	philo_eat(t_philo *philo)
@@ -19,12 +18,13 @@ int	philo_eat(t_philo *philo)
 
 	starved = 0;
 	supp_time = philo->prog->tte - philo->prog->ttd;
-	print_state(philo, "is eating 🍝");
-	pthread_mutex_unlock(&philo->prog->printer);
-	pthread_mutex_unlock(&philo->prog->waiter);
 	philo->nb_eat++;
 	philo->just_eat = 1;
 	check_change_order(philo->prog);
+	philo->last_time_eat = get_time();
+	print_state(philo, "is eating 🍝");
+	pthread_mutex_unlock(&philo->prog->printer);
+	pthread_mutex_unlock(&philo->prog->waiter);
 	if (supp_time > 0)
 	{
 		ft_sleep(philo->prog, philo->prog->ttd);
@@ -35,7 +35,6 @@ int	philo_eat(t_philo *philo)
 	}
 	else
 		ft_sleep(philo->prog, philo->prog->tte);
-	philo->last_time_eat = get_time();
 	return (starved + philo_starved(philo));
 }
 

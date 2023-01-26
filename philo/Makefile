@@ -6,7 +6,7 @@
 #    By: tcasale <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/10 14:00:48 by tcasale           #+#    #+#              #
-#    Updated: 2023/01/20 11:42:56 by tcasale          ###   ########.fr        #
+#    Updated: 2023/01/25 16:48:43 by tcasale          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,9 @@ all :		$(NAME)
 
 $(NAME) : $(OBJS)
 			$(CC) $(OBJS) -o $(NAME)
+
+sanitize : $(OBJS)
+			$(CC) $(OBJS) -fsanitize=thread -o $(NAME)
 
 clean :
 			$(RM) $(OBJS)

@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:01:20 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/23 16:48:51 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/01/26 12:08:50 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_program
 	pthread_mutex_t	printer;
 	pthread_mutex_t	death_printer;
 	pthread_mutex_t	waiter;
-	pthread_mutex_t	check;
 }					t_program;
 
 void		free_all(t_program *prog);
