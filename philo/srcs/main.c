@@ -16,8 +16,9 @@ void	free_all(t_program *t_prog)
 	int	n;
 
 	n = 0;
-	pthread_mutex_destroy(&t_prog->waiter);
 	pthread_mutex_destroy(&t_prog->printer);
+	pthread_mutex_destroy(&t_prog->death_printer);
+	pthread_mutex_destroy(&t_prog->checker);
 	while (n < t_prog->nb_philo)
 	{
 		pthread_mutex_destroy(&t_prog->forks[n]);

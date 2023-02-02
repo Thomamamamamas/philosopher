@@ -34,10 +34,15 @@ void	print_state(t_philo *philo, char *str)
 {
 	long long	time;
 
+	pthread_mutex_lock(&philo->prog->printer);
 	if (philo->prog->is_dead && ft_strcmp(str, "is dead 💀"))
+	{
+		pthread_mutex_unlock(&philo->prog->printer);
 		return ;
+	}
 	time = get_time() - philo->prog->start_time;
 	printf("%lldms %d %s\n", time, philo->id, str);
+	pthread_mutex_unlock(&philo->prog->printer);
 }
 
 int	ft_atoi(const char *str)

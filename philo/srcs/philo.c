@@ -17,22 +17,17 @@ void	*life(void *tmp_philo)
 	int			dead;
 
 	philo = (t_philo *)tmp_philo;
-	while (!philo->prog->is_dead)
+	while (!philo->prog->is_dead && !philo->prog->eat_all)
 	{
-		if (philo->prog->order == philo->id % 2 && philo->just_eat == 0)
+		if (dead == 0 && check_is_valid_eater(philo))
 		{
 			dead = philo_think(philo);
 			dead = eat_procedure(philo);
 		}
-		else
+		else if (dead == 0)
 			dead = philo_sleep(philo);
-		if (dead != 0)
-		{
-			philo_funeral(philo);
-			return (NULL);
-		}
-		else if (check_all_eat(philo->prog))
-			return (NULL);
+		else
+			return (philo_funeral(philo));
 	}
 	return (NULL);
 }
@@ -41,8 +36,6 @@ int	eat_procedure(t_philo *philo)
 {
 	int	res;
 
-	pthread_mutex_lock(&philo->prog->waiter);
-	pthread_mutex_lock(&philo->prog->printer);
 	res = grab_forks(philo);
 	res = philo_eat(philo);
 	pthread_mutex_unlock(philo->l_fork);
@@ -79,15 +72,16 @@ int	philo_starved(t_philo *philo)
 	return (0);
 }
 
-void	philo_funeral(t_philo *philo)
+void	*philo_funeral(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->prog->death_printer);
 	if (philo->prog->is_dead)
 	{
 		pthread_mutex_unlock(&philo->prog->death_printer);
-		return ;
+		return (NULL);
 	}
 	print_state(philo, "died 💀");
 	philo->prog->is_dead = 1;
 	pthread_mutex_unlock(&philo->prog->death_printer);
+	return (NULL);
 }

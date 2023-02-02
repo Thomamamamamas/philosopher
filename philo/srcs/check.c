@@ -11,6 +11,16 @@
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
 
+int	check_is_valid_eater(t_philo *philo)
+{
+	if (philo->prog->order == philo->id % 2)
+	{
+		if (philo->just_eat == 0)
+			return (1);
+	}
+	return (0);
+}
+
 int	check_all_eat(t_program *t_prog)
 {
 	int	n;
@@ -36,7 +46,7 @@ int	check_change_order(t_program *t_prog)
 	while (n < t_prog->nb_philo)
 	{
 		if (t_prog->order == t_prog->philos[n].id % 2 && t_prog->philos[n].just_eat == 0)
-			return (0);
+			return (t_prog->order);
 		n++;
 	}
 	n = 0;
@@ -46,8 +56,7 @@ int	check_change_order(t_program *t_prog)
 		n++;
 	}
 	if (t_prog->order == 1)
-		t_prog->order = 0;
+		return (0);
 	else
-		t_prog->order = 1;
-	return (1);
+		return (1);
 }

@@ -22,6 +22,7 @@ int	parse_arg(t_program *t_prog, int argc, char **argv)
 			t_prog->tte = ft_atoi(argv[3]);
 			t_prog->tts = ft_atoi(argv[4]);
 			t_prog->is_dead = 0;
+			t_prog->eat_all = 0;
 			if (argc == 6)
 			{
 				t_prog->limit_eat = 1;
@@ -60,7 +61,8 @@ void	init_forks(t_program *t_prog)
 	n = 0;
 	t_prog->forks = malloc(sizeof(pthread_mutex_t) * t_prog->nb_philo);
 	pthread_mutex_init(&t_prog->printer, NULL);
-	pthread_mutex_init(&t_prog->waiter, NULL);
+	pthread_mutex_init(&t_prog->death_printer, NULL);
+	pthread_mutex_init(&t_prog->checker, NULL);
 	while (n < t_prog->nb_philo)
 	{
 		pthread_mutex_init(&t_prog->forks[n], NULL);
@@ -85,6 +87,20 @@ void	init_philos(t_program *t_prog)
 		pthread_create(&t_prog->philos[n].thread, NULL, life, &t_prog->philos[n]);
 		n++;
 	}
+	while (!t_prog->is_dead && !t_prog->eat_all)
+	{
+		pthread_mutex_lock(&t_prog->checker);
+		t_prog->eat_all = check_all_eat(t_prog);
+		t_prog->order = check_change_order(t_prog);
+		pthread_mutex_unlock(&t_prog->checker);
+	}
+	exit_philo_lifestyle(t_prog);
+}
+
+void	exit_philo_lifestyle(t_program *t_prog)
+{
+	int	n;
+
 	n = 0;
 	while (n < t_prog->nb_philo)
 	{
