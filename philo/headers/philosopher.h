@@ -75,7 +75,7 @@ int			philo_starved(t_philo *philo);
 void		*philo_funeral(t_philo *philo);
 //state
 int			philo_eat(t_philo *philo);
-int			action_time(t_philo *philo, long long duration);
+int			action_time(t_philo *philo, long long duration, long long ttl);
 int			philo_take_fork(t_philo *philo);
 int			philo_sleep(t_philo *philo);
 int			philo_think(t_philo *philo);

@@ -13,43 +13,31 @@
 
 int	philo_eat(t_philo *philo)
 {
-	int	starved;
+	int			starved;
+	long long	last;
+	long long	ttl;
 
 	philo->nb_eat++;
 	philo->just_eat = 1;
 	print_state(philo, "is eating 🍝");
-	starved = action_time(philo, philo->prog->ttd);
+	last = get_time() - philo->last_time_eat;
+	ttl = philo->prog->ttd - last;
 	philo->last_time_eat = get_time();
+	starved = action_time(philo, philo->prog->tte, ttl);
 	return (starved + philo_starved(philo));
 }
 
-int	action_time(t_philo *philo, long long duration)
+int	action_time(t_philo *philo, long long duration, long long ttl)
 {
-	long long int	supp_time;
-	int				starved;
-
-	supp_time = (philo->last_time_eat - get_time()) + duration;
-	starved = 0;
-	if (supp_time > (long long)philo->prog->ttd)
+	if (ttl < duration)
 	{
-		ft_sleep(philo->prog, philo->prog->ttd);
-		starved = philo_starved(philo);
-		if (starved == 0)
-			ft_sleep(philo->prog, supp_time - philo->prog->ttd);
+		ft_sleep(philo->prog, ttl);
+		if (!philo_starved(philo))
+			ft_sleep(philo->prog, duration - ttl);
 	}
 	else
-	{
-		if (duration > philo->prog->ttd)
-		{
-			ft_sleep(philo->prog, philo->prog->ttd);
-			starved = philo_starved(philo);
-			if (starved == 0)
-				ft_sleep(philo->prog, duration - philo->prog->ttd);
-		}
-		else
-			ft_sleep(philo->prog, duration);
-	}
-	return (starved + philo_starved(philo));
+		ft_sleep(philo->prog, duration);
+	return (philo_starved(philo));
 }
 
 int	philo_take_fork(t_philo *philo)
@@ -60,10 +48,14 @@ int	philo_take_fork(t_philo *philo)
 
 int	philo_sleep(t_philo *philo)
 {
-	int starved;
+	int			starved;
+	long long	last;
+	long long	ttl;
 
 	print_state(philo, "is sleeping 🛌");
-	starved = action_time(philo, philo->prog->tts);
+	last = get_time() - philo->last_time_eat;
+	ttl = philo->prog->ttd - last;
+	starved = action_time(philo, philo->prog->tts, ttl);
 	return (starved + philo_starved(philo));
 }
 

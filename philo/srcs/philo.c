@@ -64,10 +64,7 @@ int	grab_forks(t_philo *philo)
 
 int	philo_starved(t_philo *philo)
 {
-	long long	actual_time;
-
-	actual_time = get_time();
-	if (actual_time - philo->last_time_eat > (long long)philo->prog->ttd)
+	if (get_time() - philo->last_time_eat >= (long long)philo->prog->ttd)
 		return (1);
 	return (0);
 }
