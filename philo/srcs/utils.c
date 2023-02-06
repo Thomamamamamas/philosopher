@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:46:19 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/23 15:25:30 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/06 09:52:59 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -19,11 +19,11 @@ long long	get_time(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void	ft_sleep(t_program *t_prog, int time)
+void	ft_sleep(t_program *prog, int time)
 {
 	long long	start_time;
 
-	if (t_prog->is_dead)
+	if (prog->is_dead)
 		return ;
 	start_time = get_time();
 	while (get_time() - start_time < time)

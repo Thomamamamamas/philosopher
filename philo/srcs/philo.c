@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 11:43:21 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/26 12:08:44 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/06 15:55:33 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -17,7 +17,7 @@ void	*life(void *tmp_philo)
 	int			dead;
 
 	philo = (t_philo *)tmp_philo;
-	while (!philo->prog->is_dead && !philo->prog->eat_all)
+	while (check_diner_continu(philo->prog))
 	{
 		if (dead == 0 && check_is_valid_eater(philo))
 		{
@@ -77,8 +77,10 @@ void	*philo_funeral(t_philo *philo)
 		pthread_mutex_unlock(&philo->prog->death_printer);
 		return (NULL);
 	}
-	print_state(philo, "died 💀");
-	philo->prog->is_dead = 1;
+	print_state(philo, "died");
 	pthread_mutex_unlock(&philo->prog->death_printer);
+	pthread_mutex_lock(&philo->prog->checker);
+	philo->prog->is_dead = 1;
+	pthread_mutex_unlock(&philo->prog->checker);
 	return (NULL);
 }

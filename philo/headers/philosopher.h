@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:01:20 by tcasale           #+#    #+#             */
-/*   Updated: 2023/01/26 12:08:50 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/06 15:55:37 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ typedef struct s_program
 
 void		free_all(t_program *prog);
 //init
-int			parse_arg(t_program *t_prog, int argc, char **argv);
-int			check_good_parsing_value(t_program *t_prog, char **argv);
+int			parse_arg(t_program *prog, int argc, char **argv);
+int			check_good_parsing_value(t_program *prog, char **argv);
 void		init_forks(t_program *forks);
-void		init_philos(t_program *t_prog);
-void		exit_philo_lifestyle(t_program *t_prog);
+void		init_philos(t_program *prog);
+void		check_end_diner(t_program *prog);
 //utils
 long long	get_time(void);
 void		ft_sleep(t_program *philo, int time);
@@ -81,7 +81,8 @@ int			philo_sleep(t_philo *philo);
 int			philo_think(t_philo *philo);
 //check
 int			check_is_valid_eater(t_philo *philo);
-int			check_all_eat(t_program *t_prog);
-int			check_change_order(t_program *t_prog);
+int			check_all_eat(t_program *prog);
+int			check_change_order(t_program *prog);
+int			check_diner_continu(t_program *prog);
 
 #endif
