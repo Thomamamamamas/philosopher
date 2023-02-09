@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:00:07 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/06 15:55:35 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/09 12:34:26 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -82,6 +82,8 @@ void	init_philos(t_program *prog)
 	while (n < prog->nb_philo)
 	{
 		prog->philos[n].id = n + 1;
+		prog->philos[n].just_eat = 0;
+		prog->philos[n].just_sleep = 0;
 		prog->philos[n].nb_eat = 0;
 		prog->philos[n].prog = prog;
 		prog->philos[n].last_time_eat = prog->start_time;

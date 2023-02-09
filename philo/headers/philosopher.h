@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:01:20 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/06 15:55:37 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/09 16:19:26 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_philo
 	long long			start_time;
 	int					nb_eat;
 	int					just_eat;
+	int					just_sleep;
 	long long			last_time_eat;
 	pthread_mutex_t		*l_fork;
 	pthread_mutex_t		*r_fork;

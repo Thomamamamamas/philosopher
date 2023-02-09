@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:46:19 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/06 09:52:59 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/09 16:19:24 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -35,13 +35,13 @@ void	print_state(t_philo *philo, char *str)
 	long long	time;
 
 	pthread_mutex_lock(&philo->prog->printer);
-	if (philo->prog->is_dead && ft_strcmp(str, "is dead 💀"))
+	if (philo->prog->is_dead)
 	{
 		pthread_mutex_unlock(&philo->prog->printer);
 		return ;
 	}
 	time = get_time() - philo->prog->start_time;
-	printf("%lldms %d %s\n", time, philo->id, str);
+	printf("%6lld %3d %s\n", time, philo->id, str);
 	pthread_mutex_unlock(&philo->prog->printer);
 }
 

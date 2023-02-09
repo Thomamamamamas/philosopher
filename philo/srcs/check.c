@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 11:37:41 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/06 15:55:34 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/09 12:51:26 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -27,7 +27,6 @@ int	check_all_eat(t_program *prog)
 {
 	int	n;
 
-	
 	n = 0;
 	if (prog->limit_eat == 0)
 		return (0);

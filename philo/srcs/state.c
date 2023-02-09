@@ -6,25 +6,22 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:37:11 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/06 09:41:39 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/09 16:19:23 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
 
 int	philo_eat(t_philo *philo)
 {
-	int			starved;
 	long long	last;
 	long long	ttl;
 
 	philo->nb_eat++;
-	philo->just_eat = 1;
-	print_state(philo, "is eating");
-	last = get_time() - philo->last_time_eat;
-	ttl = philo->prog->ttd - last;
 	philo->last_time_eat = get_time();
-	starved = action_time(philo, philo->prog->tte, ttl);
-	return (starved + philo_starved(philo));
+	last = philo->last_time_eat - get_time();
+	ttl = philo->prog->ttd - last;
+	print_state(philo, "is eating");
+	return (action_time(philo, philo->prog->tte, ttl));
 }
 
 int	action_time(t_philo *philo, long long duration, long long ttl)
@@ -56,6 +53,7 @@ int	philo_sleep(t_philo *philo)
 	last = get_time() - philo->last_time_eat;
 	ttl = philo->prog->ttd - last;
 	starved = action_time(philo, philo->prog->tts, ttl);
+	philo->just_sleep = 1;
 	return (starved + philo_starved(philo));
 }
 
