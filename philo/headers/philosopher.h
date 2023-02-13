@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:01:20 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/09 16:19:26 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/13 16:01:26 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@
 
 struct	s_program;
 
+typedef struct s_fork
+{
+	int				used;
+	pthread_mutex_t	mutex;
+}					t_fork;
+
 typedef struct s_philo
 {
 	pthread_t			thread;
@@ -31,8 +37,8 @@ typedef struct s_philo
 	int					just_eat;
 	int					just_sleep;
 	long long			last_time_eat;
-	pthread_mutex_t		*l_fork;
-	pthread_mutex_t		*r_fork;
+	t_fork				*l_fork;
+	t_fork				*r_fork;
 	struct s_program	*prog;
 }						t_philo;
 
@@ -49,7 +55,7 @@ typedef struct s_program
 	int				nb_must_eat;
 	long long		start_time;
 	t_philo			*philos;
-	pthread_mutex_t	*forks;
+	t_fork			*forks;
 	pthread_mutex_t	printer;
 	pthread_mutex_t	death_printer;
 	pthread_mutex_t	checker;
@@ -82,6 +88,7 @@ int			philo_sleep(t_philo *philo);
 int			philo_think(t_philo *philo);
 //check
 int			check_is_valid_eater(t_philo *philo);
+int			check_fork_alvailable(t_philo *philo);
 int			check_all_eat(t_program *prog);
 int			check_change_order(t_program *prog);
 int			check_diner_continu(t_program *prog);

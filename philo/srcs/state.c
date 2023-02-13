@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:37:11 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/09 16:19:23 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/13 16:01:29 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -16,8 +16,12 @@ int	philo_eat(t_philo *philo)
 	long long	last;
 	long long	ttl;
 
+	pthread_mutex_lock(&philo->prog->checker);
 	philo->nb_eat++;
 	philo->last_time_eat = get_time();
+	philo->just_sleep = 0;
+	philo->just_eat = 1;
+	pthread_mutex_unlock(&philo->prog->checker);
 	last = philo->last_time_eat - get_time();
 	ttl = philo->prog->ttd - last;
 	print_state(philo, "is eating");
@@ -40,7 +44,7 @@ int	action_time(t_philo *philo, long long duration, long long ttl)
 int	philo_take_fork(t_philo *philo)
 {
 	print_state(philo, "has taken fork");
-	return (philo_starved(philo));
+	return (0);
 }
 
 int	philo_sleep(t_philo *philo)
@@ -53,12 +57,22 @@ int	philo_sleep(t_philo *philo)
 	last = get_time() - philo->last_time_eat;
 	ttl = philo->prog->ttd - last;
 	starved = action_time(philo, philo->prog->tts, ttl);
+	pthread_mutex_lock(&philo->prog->checker);
 	philo->just_sleep = 1;
-	return (starved + philo_starved(philo));
+	philo->just_eat = 0;
+	pthread_mutex_unlock(&philo->prog->checker);
+	return (starved);
 }
 
 int	philo_think(t_philo *philo)
 {
+	int	starved;
+
+	starved = 0;
 	print_state(philo, "is thinking");
-	return (philo_starved(philo));
+	while (!check_fork_alvailable(philo) && !starved)
+	{
+		starved = philo_starved(philo);
+	}
+	return (starved);
 }

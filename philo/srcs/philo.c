@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 11:43:21 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/09 16:19:22 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/13 16:01:27 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -17,12 +17,14 @@ void	*life(void *tmp_philo)
 	int			dead;
 
 	philo = (t_philo *)tmp_philo;
+	dead = 0;
 	while (check_diner_continu(philo->prog))
 	{
-		if (dead == 0 && check_is_valid_eater(philo))
+		if (dead == 0 && (check_is_valid_eater(philo) || philo->just_sleep))
 		{
 			dead = philo_think(philo);
-			dead = eat_procedure(philo);
+			if (dead == 0)
+				dead = eat_procedure(philo);
 		}
 		else if (dead == 0 && !philo->just_sleep)
 			dead = philo_sleep(philo);
@@ -38,38 +40,26 @@ int	eat_procedure(t_philo *philo)
 
 	res = grab_forks(philo);
 	res = philo_eat(philo);
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->r_fork);
-	philo->just_eat = 1;
+	philo->r_fork->used = 0;
+	philo->l_fork->used = 0;
+	pthread_mutex_unlock(&philo->l_fork->mutex);
+	pthread_mutex_unlock(&philo->r_fork->mutex);
 	return (res);
 }
 
 int	grab_forks(t_philo *philo)
 {
-	int	tmp;
-
-	if (philo->id == 0)
-		philo->r_fork = &philo->prog->forks[philo->prog->nb_philo];
-	else
-		philo->r_fork = &philo->prog->forks[philo->id];
-	if (philo->id == philo->prog->nb_philo)
-		philo->l_fork = &philo->prog->forks[0];
-	else
-		philo->l_fork = &philo->prog->forks[philo->id - 1];
-	pthread_mutex_lock(philo->l_fork);
-	tmp = philo_take_fork(philo);
-	pthread_mutex_lock(philo->r_fork);
-	tmp = philo_take_fork(philo);
-	return (tmp + philo_starved(philo));
+	pthread_mutex_lock(&philo->l_fork->mutex);
+	philo_take_fork(philo);
+	pthread_mutex_lock(&philo->r_fork->mutex);
+	philo_take_fork(philo);
+	return (philo_starved(philo));
 }
 
 int	philo_starved(t_philo *philo)
 {
 	if (get_time() - philo->last_time_eat >= (long long)philo->prog->ttd)
-	{
-		printf("%lld - %lld = %lld\n", get_time(), philo->last_time_eat, get_time() - philo->last_time_eat);
 		return (1);
-	}
 	return (0);
 }
 

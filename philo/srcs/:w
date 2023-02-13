@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 14:00:07 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/13 13:11:43 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/10 12:33:06 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -66,7 +66,15 @@ void	init_forks(t_program *prog)
 	while (n < prog->nb_philo)
 	{
 		pthread_mutex_init(&prog->forks[n].mutex, NULL);
-		prog->forks[n].used = 0;
+		if (prog->philos[n].id == 0)
+			prog->philos[n].r_fork = &prog->forks[prog->nb_philo];
+		else
+			prog->philos[n].r_fork = &prog->forks[prog->philos[n].id];
+		if (prog->philos[n].id == prog->nb_philo)
+			prog->philos[n].l_fork = &prog->forks[0];
+		else
+			prog->philos[n].l_fork = &prog->forks[prog->philos[n].id - 1];
+		printf("pute\n");
 		n++;
 	}
 }
@@ -88,11 +96,6 @@ void	init_philos(t_program *prog)
 		prog->philos[n].nb_eat = 0;
 		prog->philos[n].prog = prog;
 		prog->philos[n].last_time_eat = prog->start_time;
-		prog->philos[n].r_fork = &prog->forks[prog->philos[n].id - 1];
-		if (prog->philos[n].id == prog->nb_philo)
-			prog->philos[n].l_fork = &prog->forks[0];
-		else
-			prog->philos[n].l_fork = &prog->forks[prog->philos[n].id];
 		pthread_create(&prog->philos[n].thread, NULL, life, &prog->philos[n]);
 		n++;
 	}

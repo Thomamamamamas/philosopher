@@ -6,7 +6,7 @@
 /*   By: tcasale <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 11:37:41 by tcasale           #+#    #+#             */
-/*   Updated: 2023/02/09 12:51:26 by tcasale          ###   ########.fr       */
+/*   Updated: 2023/02/13 16:01:28 by tcasale          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../headers/philosopher.h"
@@ -19,6 +19,24 @@ int	check_is_valid_eater(t_philo *philo)
 	res = 0;
 	if (philo->prog->order == philo->id % 2 && philo->just_eat == 0)
 			res = 1;
+	else
+		res = 0;
+	pthread_mutex_unlock(&philo->prog->checker);
+	return (res);
+}
+
+int	check_fork_alvailable(t_philo *philo)
+{
+	int	res;
+
+	res = 0;
+	pthread_mutex_lock(&philo->prog->checker);
+	if (!philo->l_fork->used && !philo->r_fork->used)
+	{
+		philo->l_fork->used = 1;
+		philo->r_fork->used = 1;
+		res = 1;
+	}
 	pthread_mutex_unlock(&philo->prog->checker);
 	return (res);
 }
@@ -42,11 +60,13 @@ int	check_all_eat(t_program *prog)
 int	check_change_order(t_program *prog)
 {
 	int	n;
+	int	order;
 
 	n = 0;
+	order = prog->philos[n].id % 2;
 	while (n < prog->nb_philo)
 	{
-		if (prog->order == prog->philos[n].id % 2 && prog->philos[n].just_eat == 0)
+		if (prog->order == order && prog->philos[n].just_eat == 0)
 			return (prog->order);
 		n++;
 	}
